@@ -20,6 +20,7 @@ type IGCache interface {
 	Removes(ctx context.Context, keys []string)
 	RemoveByTag(ctx context.Context, tag string)
 	RemoveByTags(ctx context.Context, tag []string)
+	Clear(ctx context.Context)
 	SetIfNotExist(ctx context.Context, key string, value interface{}, duration time.Duration, tag string) bool
 	GetOrSet(ctx context.Context, key string, value interface{}, duration time.Duration, tag string) interface{}
 	GetOrSetFunc(ctx context.Context, key string, f gcache.Func, duration time.Duration, tag string) interface{}
@@ -213,6 +214,11 @@ func (c *GfCache) RemoveByTags(ctx context.Context, tag []string) {
 	for _, v := range tag {
 		c.RemoveByTag(ctx, v)
 	}
+}
+
+// Clear deletes all in the cache.
+func (c *GfCache) Clear(ctx context.Context) {
+	_ = c.cache.Clear(ctx)
 }
 
 // Data returns a copy of all tagKey-value pairs in the cache as map type.
