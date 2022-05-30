@@ -13,6 +13,26 @@ import (
 	"github.com/gogf/gf/v2/util/gconv"
 )
 
+type IGCache interface {
+	Get(ctx context.Context, key string) (*gvar.Var, error)
+	Set(ctx context.Context, key string, value interface{}, duration time.Duration, tag ...string) error
+	Remove(ctx context.Context, key string) (*gvar.Var, error)
+	Removes(ctx context.Context, keys []string)
+	RemoveByTag(ctx context.Context, tag string)
+	RemoveByTags(ctx context.Context, tag []string)
+	Clear(ctx context.Context) error
+	SetIfNotExist(ctx context.Context, key string, value interface{}, duration time.Duration, tag string) (bool, error)
+	GetOrSet(ctx context.Context, key string, value interface{}, duration time.Duration, tag string) (*gvar.Var, error)
+	GetOrSetFunc(ctx context.Context, key string, f gcache.Func, duration time.Duration, tag string) (*gvar.Var, error)
+	GetOrSetFuncLock(ctx context.Context, key string, f gcache.Func, duration time.Duration, tag string) (*gvar.Var, error)
+	Contains(ctx context.Context, key string) (bool, error)
+	Data(ctx context.Context) (map[interface{}]interface{}, error)
+	Keys(ctx context.Context) ([]interface{}, error)
+	KeyStrings(ctx context.Context) ([]string, error)
+	Values(ctx context.Context) ([]interface{}, error)
+	Size(ctx context.Context) (int, error)
+}
+
 type GfCache struct {
 	CachePrefix string // 缓存前缀
 	cache       *gcache.Cache

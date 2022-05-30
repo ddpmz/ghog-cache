@@ -18,6 +18,9 @@ func TestBatch(t *testing.T) {
 	// t.Run("testRedisClear", testRedisClear)
 }
 
+func RegisterCache(i cache.IGCache) {
+}
+
 // 缓存使用内存测试
 func testMemory(t *testing.T) {
 	c := cache.New("prefix")
@@ -39,6 +42,8 @@ func testRedis(t *testing.T) {
 	ctx := context.Background()
 	gredis.SetConfig(&config)
 	c := cache.NewRedis("prefix")
+	// 判断是否实现了接口
+	RegisterCache(c)
 	// tag can batch Management Cache
 	_ = c.Set(ctx, "person", g.Map{"name": "John", "age": 10}, 0)
 	v, _ := c.Get(ctx, "person")
